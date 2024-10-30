@@ -1,0 +1,28 @@
+version: '3.8'
+services:
+  activemq:
+    image: rmohr/activemq:latest
+    container_name: activemq
+    environment:
+      ACTIVEMQ_ADMIN_LOGIN: admin         # نام کاربری مدیر
+      ACTIVEMQ_ADMIN_PASSWORD: nazir_admin   # رمز عبور مدیر
+      ACTIVEMQ_CONFIG_MINMEMORY: 512      # حافظه حداقل
+      ACTIVEMQ_CONFIG_MAXMEMORY: 2048     # حافظه حداکثر
+      ACTIVEMQ_CONFIG_SCHEDULER_SUPPORT: "true"  # پشتیبانی از برنامه‌ریزی
+    ports:
+      - "61616:61616"   # پورت ارتباطی برای پروتکل OpenWire
+      - "8161:8161"     # پورت داشبورد وب ActiveMQ
+    volumes:
+      - activemq-data:/data                # داده‌های ActiveMQ برای پایداری
+      - activemq-logs:/var/log/activemq    # لاگ‌ها
+    restart: always                        # ری‌استارت خودکار در صورت توقف
+    networks:
+      - activemq_network
+
+volumes:
+  activemq-data:
+  activemq-logs:
+
+networks:
+  activemq_network:
+    driver: bridge
